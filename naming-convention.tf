@@ -8,5 +8,5 @@ module "aks_name" {
       tags      = var.tags
     }
   }
-  resource_type = "aks"
+  resource_type = "iothub"
 }
