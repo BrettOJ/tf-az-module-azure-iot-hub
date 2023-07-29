@@ -5,6 +5,7 @@ main.tf
 # .tfstate files
 *.tfstate
 *.tfstate.*
+terraform.txt
 
 # Crash log files
 crash.log
