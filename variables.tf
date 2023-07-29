@@ -20,7 +20,7 @@ variable "sku_capacity" {
 }
 
 variable "endpoint" {
-    type = list(object({
+    type = object({
         type = string
         name = string
         authentication_type = string
@@ -34,26 +34,26 @@ variable "endpoint" {
         encoding = string
         file_name_format = string
         resource_group_name = string
-  }))
+  })
     default = null  
 }
 
 variable "route" {
-    type = list(object({
+    type = object({
         name = string
         source = string
         endpoint_names = list(string)
         condition = string
-  }))
+  })
     default = null  
 }
 
 variable "enrichment" {
-    type = list(object({
+    type = object({
         key = string
         value = string
         endpoint_names = list(string)
-  }))
+  })
     default = null  
 }
 
