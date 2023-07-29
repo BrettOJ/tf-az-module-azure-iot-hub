@@ -1,13 +1,4 @@
 
-provider "azurerm" {
-  storage_use_azuread        = false
-  use_msi                    = false
-  skip_provider_registration = false
-  tenant_id            = ""
-  subscription_id      = ""
-   features {}
-}
-
 resource "azurerm_resource_group" "bojtest" {
   name     = "bojtest-resources"
   location = "West Europe"
@@ -52,14 +43,11 @@ resource "azurerm_eventhub_authorization_rule" "bojtest" {
 
 module azurerm_iothub {
   source = "git::https://github.com/BrettOJ/tf-az-module-azure-iot-hub?ref=main"
-  name                = "bojtest-IoTHub"
   resource_group_name = azurerm_resource_group.bojtest.name
   location            = azurerm_resource_group.bojtest.location
-
-  sku {
-    name     = "S1"
-    capacity = "1"
-  }
+  sku_name     = "S1"
+  sku_capacity = "1"
+  
 
   endpoint = {
     AzureStorageContainer = {

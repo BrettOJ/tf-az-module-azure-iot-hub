@@ -8,8 +8,8 @@ resource "azurerm_iothub" "iothub" {
     capacity = var.sku_capacity
   }
 
-dynamic "enpoint" {
-    for_each = var.enpoint == null ? [] : [1]
+dynamic "endpoint" {
+    for_each = var.endpoint == null ? [] : [1]
     content {
         type = var.endpoint.type
         name = var.endpoint.name

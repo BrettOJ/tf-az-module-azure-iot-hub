@@ -19,7 +19,7 @@ variable "sku_capacity" {
     default = 1
 }
 
-variable "enpoint" {
+variable "endpoint" {
     type = list(object({
         type = string
         name = string
