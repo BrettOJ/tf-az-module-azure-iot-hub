@@ -1,4 +1,13 @@
-
+locals {
+    naming_convention_info = {
+    name         = "001"
+    project_code = "ml"
+    env          = "de"
+    zone         = "in"
+    agency_code  = "mrl"
+    tier         = "pp"
+  }
+}
 resource "azurerm_resource_group" "bojtest" {
   name     = "bojtest-resources"
   location = "West Europe"
@@ -45,6 +54,7 @@ module azurerm_iothub {
   source = "git::https://github.com/BrettOJ/tf-az-module-azure-iot-hub?ref=main"
   resource_group_name = azurerm_resource_group.bojtest.name
   location            = azurerm_resource_group.bojtest.location
+  naming_convention_info = local.naming_convention_info
   sku_name     = "S1"
   sku_capacity = "1"
   
@@ -105,4 +115,5 @@ route = {
   tags = {
     purpose = "testing"
   }
+
 }

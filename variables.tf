@@ -74,3 +74,15 @@ variable "tags" {
     type = map(string)
     default = null
 }
+variable "naming_convention_info" {
+    type = object({
+        name         = string
+        project_code = string
+        env          = string
+        zone         = string
+        agency_code  = string
+        tier         = string
+  })
+    default = null
+}
+  
