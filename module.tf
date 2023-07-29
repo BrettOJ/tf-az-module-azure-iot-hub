@@ -11,19 +11,19 @@ resource "azurerm_iothub" "iothub" {
 dynamic "endpoint" {
     for_each = var.endpoint == null ? [] : [1]
     content {
-        type = var.endpoint.type
-        name = var.endpoint.name
-        authentication_type = var.endpoint.authentication_type
-        identity_id = var.endpoint.identity_id
-        endpoint_uri = var.endpoint.endpoint_uri
-        entity_path = var.endpoint.entity_path
-        connection_string = var.endpoint.connection_string
-        batch_frequency_in_seconds = var.endpoint.batch_frequency_in_seconds
-        max_chunk_size_in_bytes = var.endpoint.max_chunk_size_in_bytes
-        container_name = var.endpoint.container_name
-        encoding = var.endpoint.encoding
-        file_name_format = var.endpoint.file_name_format
-        resource_group_name = var.endpoint.resource_group_name
+        type =  endpoint.value.type
+        name = endpoint.value.name
+        authentication_type = endpoint.value.authentication_type
+        identity_id = endpoint.value.identity_id
+        endpoint_uri = endpoint.value.endpoint_uri
+        entity_path = endpoint.value.entity_path
+        connection_string = endpoint.value.connection_string
+        batch_frequency_in_seconds = endpoint.value.batch_frequency_in_seconds
+        max_chunk_size_in_bytes = endpoint.value.max_chunk_size_in_bytes
+        container_name = endpoint.value.container_name
+        encoding = endpoint.value.encoding
+        file_name_format = endpoint.value.file_name_format
+        resource_group_name = endpoint.value.resource_group_name
     }
 }
 
