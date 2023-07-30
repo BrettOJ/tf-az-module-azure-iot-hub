@@ -9,9 +9,9 @@ resource "azurerm_iothub" "iothub" {
   }
 
 dynamic "endpoint" {
-    for_each = var.endpoint == null ? [] : [1]
+    for_each = var.endpoints != null ? var.endpoints : []
     content {
-        type =  endpoint.value.type
+        type = endpoint.value.type
         name = endpoint.value.name
         authentication_type = endpoint.value.authentication_type
         identity_id = endpoint.value.identity_id
@@ -28,17 +28,18 @@ dynamic "endpoint" {
 }
 
 dynamic "route" {
-    for_each = var.route == null ? [] : [1]
+    for_each = var.routes != null ? var.routes : []
     content {
-        name = var.route.name
-        source = var.route.source
-        endpoint_names = var.route.endpoint_names
-        condition = var.route.condition
+        name = route.value.name
+        source = route.value.source
+        endpoint_names = route.value.endpoint_names
+        condition = route.value.condition
+        enabled = route.value.enabled
     }
 }
 
 dynamic "enrichment" {
-    for_each = var.enrichment == null ? [] : [1]
+    for_each = var.enrichment != null ? [var.enrichment] : []
     content {
         key = var.enrichment.key
         value = var.enrichment.value
@@ -46,20 +47,16 @@ dynamic "enrichment" {
     }
 }
 
-dynamic "cloud_to_device" {
-    for_each = var.cloud_to_device == null ? [] : [1]
-    content {
-        max_delivery_count = var.cloud_to_device.max_delivery_count
-        default_ttl = var.cloud_to_device.default_ttl
-        dynamic "feedback" {
-            for_each = var.cloud_to_device.feedback == null ? [] : [1]
-            content {
-                time_to_live = var.cloud_to_device.feedback.time_to_live
-                max_delivery_count = var.cloud_to_device.feedback.max_delivery_count
-                lock_duration = var.cloud_to_device.feedback.lock_duration
-            }
-        }
+  cloud_to_device  {
+    max_delivery_count = var.cloud_to_device.max_delivery_count
+    default_ttl        = var.cloud_to_device.default_ttl
+    feedback  {
+      time_to_live       = var.cloud_to_device.feedback.time_to_live
+      max_delivery_count = var.cloud_to_device.feedback.max_delivery_count
+      lock_duration      = var.cloud_to_device.feedback.lock_duration
     }
-}
+  }
+
+
   tags = var.tags
 }

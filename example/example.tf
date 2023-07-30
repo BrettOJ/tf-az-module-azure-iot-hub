@@ -9,8 +9,8 @@ locals {
   }
 }
 resource "azurerm_resource_group" "bojtest" {
-  name     = "bojtest-resources"
-  location = "West Europe"
+  name     = "industrial-iot-hub-rg"
+  location = "southeastasia"
 }
 
 resource "azurerm_storage_account" "bojtest" {
@@ -59,41 +59,55 @@ module azurerm_iothub {
   sku_capacity = "1"
   
 
-  endpoint = {
-    AzureStorageContainer = {
-    type                       = "AzureStorageContainer"
-    connection_string          = azurerm_storage_account.bojtest.primary_blob_connection_string
-    name                       = "export"
-    batch_frequency_in_seconds = 60
-    max_chunk_size_in_bytes    = 10485760
-    container_name             = azurerm_storage_container.bojtest.name
-    encoding                   = "Avro"
-    file_name_format           = "{iothub}/{partition}_{YYYY}_{MM}_{DD}_{HH}_{mm}"
-
+  endpoints = [
+    {
+      type                       = "AzureIotHub.StorageContainer"
+      connection_string          = azurerm_storage_account.bojtest.primary_blob_connection_string
+      name                       = "export"
+      batch_frequency_in_seconds = 60
+      max_chunk_size_in_bytes    = 10485760
+      container_name             = azurerm_storage_container.bojtest.name
+      encoding                   = "Avro"
+      file_name_format           = "{iothub}/{partition}_{YYYY}_{MM}_{DD}_{HH}_{mm}"
+      resource_group_name        = azurerm_resource_group.bojtest.name
+      authentication_type = null
+      identity_id = null
+      endpoint_uri = null
+      entity_path = null
+    },
+    {
+      type              = "AzureIotHub.EventHub"
+      connection_string = azurerm_eventhub_authorization_rule.bojtest.primary_connection_string
+      name              = "export2"
+      batch_frequency_in_seconds = null
+      max_chunk_size_in_bytes    = null
+      container_name             = null
+      encoding                   = null
+      file_name_format           = null
+      resource_group_name        = null
+      authentication_type = null
+      identity_id = null
+      endpoint_uri = null
+      entity_path = null
     }
-    eventhub = {
-    type              = "AzureIotHub.EventHub"
-    connection_string = azurerm_eventhub_authorization_rule.bojtest.primary_connection_string
-    name              = "export2"
-    }
-  }
+  ]
 
-route = {
-    export = {
+routes = [
+   {
     name           = "export"
     source         = "DeviceMessages"
     condition      = "true"
     endpoint_names = ["export"]
     enabled        = true
-    }
-    export2 = {
+    },
+  {
     name           = "export2"
     source         = "DeviceMessages"
     condition      = "true"
     endpoint_names = ["export2"]
     enabled        = true
     }
-  }
+  ]
 
 
   enrichment = {

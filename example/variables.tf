@@ -44,7 +44,7 @@ variable "routes" {
         source = string
         endpoint_names = list(string)
         condition = string
-        enabled = bool
+        route_enabled = bool
   }))
     default = []
 }
